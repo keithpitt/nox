@@ -5,9 +5,9 @@ ul
 each request in requests
   li
     p #{request.id}: #{request.req.headers['nox-url']}
-    form(method='post', action='/response/#{request.id}')
+    form(method='post', action='/response/#{request.id}', nox-response='true', data-remote='true')
       p
-        a(href='/perform/#{request.id}') Perform
+        a(href='/perform/#{request.id}', data-remote='true', nox-perform='true') Perform
       p
         textarea(name='response')
       p

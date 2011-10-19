@@ -81,7 +81,10 @@ app.get('/perform/:id', function(req, res) {
 
     response.on('end', function(chunk) {
       var json = { response: chunks.join('') };
-      res.end(JSON.stringify(json));
+
+      res.writeHead(200, { 'content-type': 'text/json' });
+      res.write(JSON.stringify(json));
+      res.end('\n');
     });
 
   });
@@ -96,7 +99,9 @@ app.post('/response/:id', function(req, res) {
     res.send(req.body.response);
   }
 
-  res.redirect('/');
+  res.writeHead(200, { 'content-type': 'text/json' });
+  res.write(JSON.stringify({ ok: true }));
+  res.end('\n');
 
 });
 
