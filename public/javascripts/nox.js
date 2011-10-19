@@ -14,3 +14,13 @@ $('form[nox-response]').live('ajax:success', function(e, data, status, xhr) {
 
   e.stopPropagation();
 });
+
+$(function() {
+  var socket = io.connect();
+
+  socket.on('connect', function () {
+    socket.on('newRequest', function (data) {
+      $('div.container').append(data);
+    });
+  });
+});

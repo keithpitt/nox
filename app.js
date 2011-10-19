@@ -6,8 +6,13 @@
 var express = require('express');
 var http = require("http");
 var url = require("url");
+var events = require('events');
+var util = require('util');
 
 var app = module.exports = express.createServer();
+var io = require('socket.io').listen(app);
+
+var eventEmitter = new events.EventEmitter();
 
 // Configuration
 
@@ -44,6 +49,7 @@ var wait = function(check, finish) {
 }
 
 app.get('/', function(req, res){
+
   var collection = [];
   for(var k in requests) collection.push(requests[k]);
 
@@ -51,6 +57,7 @@ app.get('/', function(req, res){
     title: "Nox",
     requests: collection
   });
+
 });
 
 app.get('/perform/:id', function(req, res) {
@@ -131,6 +138,10 @@ app.all('/request', function(req, res) {
     var current = id++;
     requests[current] = { id: current, req: req, postBody: postBody.join() };
 
+    res.partial('request', { request: requests[current] }, function(error, partial) {
+      eventEmitter.emit('newRequest', partial);
+    });
+
     wait(function() {
       return requests[current]['res'];
     }, function() {
@@ -139,6 +150,16 @@ app.all('/request', function(req, res) {
       finish(res);
     });
 
+  });
+
+});
+
+// Sockets
+
+io.sockets.on('connection', function (socket) {
+
+  eventEmitter.on('newRequest', function(partial){
+    socket.emit('newRequest', partial);
   });
 
 });
