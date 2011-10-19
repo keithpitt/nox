@@ -1,3 +1,7 @@
+var notificationSound = new buzz.sound( "/sounds/alert", {
+  formats: [ "wav" ]
+});
+
 $('a[nox-perform]').live('ajax:success', function(e, data, status, xhr) {
   var el = $(this);
   var form = el.parents('form');
@@ -26,7 +30,9 @@ $(function() {
 
   socket.on('connect', function () {
     socket.on('newRequest', function (data) {
+      notificationSound.play();
       $('div.container').append(data);
     });
   });
 });
+
