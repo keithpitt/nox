@@ -10,10 +10,7 @@ $('a[nox-perform]').live('ajax:success', function(e, data, status, xhr) {
 });
 
 $('form[nox-response]').live('ajax:success', function(e, data, status, xhr) {
-  var el = $(this);
-  var li = el.parents('li');
-
-  li.remove();
+  $(this).parents('.request').remove();
 
   e.stopPropagation();
 });

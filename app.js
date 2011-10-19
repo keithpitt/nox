@@ -57,6 +57,8 @@ app.get('/perform/:id', function(req, res) {
 
   var current = req.params.id;
   var request = requests[current].req;
+  var postBody = requests[current].postBody;
+
   var requestUrl = url.parse(request.headers['nox-url']);
   var port = requestUrl.port || 80;
 
@@ -70,9 +72,8 @@ app.get('/perform/:id', function(req, res) {
 
   console.log(request.method + ' ' + requestUrl.host + ':' + port + requestUrl.pathname + requestUrl.search);
 
-  if(request.method == 'POST') {
-    client.write('test=10');
-  }
+  if(postBody)
+    client.write(postBody);
 
   client.end();
 
@@ -119,15 +120,25 @@ app.post('/response/:id', function(req, res) {
 
 app.all('/request', function(req, res) {
 
-  var current = id++;
-  requests[current] = { id: current, req: req };
+  var postBody = [];
 
-  wait(function() {
-    return requests[current]['res'];
-  }, function() {
-    var finish = requests[current]['res'];
-    delete requests[current];
-    finish(res);
+  req.on('data', function(chunk) {
+    postBody.push(chunk);
+  });
+
+  req.on('end', function() {
+
+    var current = id++;
+    requests[current] = { id: current, req: req, postBody: postBody.join() };
+
+    wait(function() {
+      return requests[current]['res'];
+    }, function() {
+      var finish = requests[current]['res'];
+      delete requests[current];
+      finish(res);
+    });
+
   });
 
 });
