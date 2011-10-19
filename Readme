@@ -1,0 +1,15 @@
+# Nox
+
+## Usage
+
+Install dependencies:
+
+```bash
+$ npm install -d
+```
+
+Start the server:
+
+```bash
+$ node app.js
+```
