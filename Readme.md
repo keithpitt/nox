@@ -5,7 +5,7 @@ requests that are made through it.
 
 ![Nox](http://www.gateworld.net/wiki/images/thumb/8/8a/Anteaus.jpg/300px-Anteaus.jpg)
 
-## Install
+## Depedencies
 
 You will need to install `node.js` to run the app. For more info, see:
 
@@ -17,12 +17,27 @@ If you are on OSX, you can simply run:
 $ brew install node
 ```
 
+After install node, you'll also need to install `npm`. You can do this
+by running:
+
+```bash
+$ curl http://npmjs.org/install.sh | sh
+```
+
+For more information on npm, see: http://npmjs.org/
+
+To install the dependencies, run:
+
+```bash
+$ npm install
+```
+
 ## Usage
 
 To start the server:
 
 ```bash
-$ node app.js
+$ foreman start
 ```
 
 # Why is this usefull?

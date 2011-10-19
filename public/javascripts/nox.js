@@ -2,13 +2,23 @@ var notificationSound = new buzz.sound( "/sounds/alert", {
   formats: [ "wav" ]
 });
 
+$('*').live('ajax:success', function(e, data, status, xhr) {
+
+  if(!data.ok && data.error) {
+    alert('Error: ' + data.error);
+  }
+
+});
+
 $('a[nox-perform]').live('ajax:success', function(e, data, status, xhr) {
   var el = $(this);
   var form = el.parents('form');
 
-  form.find('textarea[name=response]').val(data.response);
-  form.find('input[name=statusCode]').val(data.statusCode);
-  form.find('input[name=contentType]').val(data.contentType);
+  if(data.ok) {
+    form.find('textarea[name=response]').val(data.response);
+    form.find('input[name=statusCode]').val(data.statusCode);
+    form.find('input[name=contentType]').val(data.contentType);
+  }
 
   e.stopPropagation();
 });
