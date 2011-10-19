@@ -1,9 +1,10 @@
 $('a[nox-perform]').live('ajax:success', function(e, data, status, xhr) {
   var el = $(this);
   var form = el.parents('form');
-  var input = form.find('textarea[name=response]')
 
-  input.val(data.response);
+  form.find('textarea[name=response]').val(data.response);
+  form.find('input[name=statusCode]').val(data.statusCode);
+  form.find('input[name=contentType]').val(data.contentType);
 
   e.stopPropagation();
 });

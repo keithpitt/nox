@@ -58,15 +58,21 @@ app.get('/perform/:id', function(req, res) {
   var current = req.params.id;
   var request = requests[current].req;
   var requestUrl = url.parse(request.headers['nox-url']);
+  var port = requestUrl.port || 80;
 
-  var post = http.createClient(requestUrl.port || 80, requestUrl.host);
+  var post = http.createClient(port, requestUrl.host);
 
-  var client = post.request('POST', requestUrl.pathname + requestUrl.search, {
-    'Content-Type':'application/x-www-form-urlencoded'
+  var client = post.request('GET', requestUrl.pathname + requestUrl.search, {
+    host: requestUrl.host,
+    path: requestUrl.pathname,
+    "user-agent": "node.js"
   });
 
-  // TODO
-  client.write('test=10');
+  console.log(request.method + ' ' + requestUrl.host + ':' + port + requestUrl.pathname + requestUrl.search);
+
+  if(request.method == 'POST') {
+    client.write('test=10');
+  }
 
   client.end();
 
@@ -80,7 +86,11 @@ app.get('/perform/:id', function(req, res) {
     });
 
     response.on('end', function(chunk) {
-      var json = { response: chunks.join('') };
+      var json = {
+        response: chunks.join(''),
+        statusCode: res.statusCode,
+        contentType: response.headers['content-type']
+      };
 
       res.writeHead(200, { 'content-type': 'text/json' });
       res.write(JSON.stringify(json));
@@ -96,7 +106,9 @@ app.post('/response/:id', function(req, res) {
   var current = req.params.id;
 
   requests[current]['res'] = function(res) {
-    res.send(req.body.response);
+    res.writeHead(req.body.statusCode, { 'content-type': req.body.contentType });
+    res.write(req.body.response);
+    res.end();
   }
 
   res.writeHead(200, { 'content-type': 'text/json' });
@@ -105,7 +117,7 @@ app.post('/response/:id', function(req, res) {
 
 });
 
-app.get('/request', function(req, res) {
+app.all('/request', function(req, res) {
 
   var current = id++;
   requests[current] = { id: current, req: req };

@@ -9,6 +9,14 @@ each request in requests
       p
         a(href='/perform/#{request.id}', data-remote='true', nox-perform='true') Perform
       p
+        label
+          strong Status Code
+          input(name='statusCode')
+      p
+        label
+          strong Content Type
+          input(name='contentType')
+      p
         textarea(name='response')
       p
         button(type='submit') Send Response
