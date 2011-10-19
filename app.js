@@ -34,5 +34,37 @@ app.get('/', function(req, res){
   });
 });
 
-app.listen(3000);
+var wait = function(check, finish) {
+  if(check()) {
+    finish();
+  } else {
+    setTimeout(function() {
+      wait(check, finish);
+    }, 100);
+  }
+}
+
+app.get('/request', function(req, res) {
+
+  var x = true;
+
+  setTimeout(function(){
+    x = false;
+    console.log("ASDASDASD");
+  }, 3000);
+
+  console.log(req);
+
+  wait(function() {
+    return !x;
+  }, function() {
+    res.render('index', {
+      title: 'Express'
+    });
+  });
+
+});
+
+app.listen(7654);
+
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
