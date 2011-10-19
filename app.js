@@ -5,6 +5,7 @@
 
 var express = require('express');
 var http = require("http");
+var https = require("https");
 var url = require("url");
 var events = require('events');
 var util = require('util');
@@ -13,6 +14,14 @@ var app = module.exports = express.createServer();
 var io = require('socket.io').listen(app);
 
 var eventEmitter = new events.EventEmitter();
+
+function clone(o) {
+  var ret = {};
+  Object.keys(o).forEach(function (val) {
+    ret[val] = o[val];
+  });
+  return ret;
+}
 
 // Configuration
 
@@ -67,26 +76,32 @@ app.get('/perform/:id', function(req, res) {
   var postBody = requests[current].postBody;
 
   var requestUrl = url.parse(request.headers['nox-url']);
-  var port = requestUrl.port || 80;
 
-  var post = http.createClient(port, requestUrl.host);
+  var passThroughHeaders = clone(request.headers);
+  delete passThroughHeaders['nox-url'];
+  delete passThroughHeaders['user-agent'];
+  delete passThroughHeaders['connection'];
+  delete passThroughHeaders['host'];
 
-  var client = post.request('GET', requestUrl.pathname + requestUrl.search, {
-    host: requestUrl.host,
-    path: requestUrl.pathname,
-    "user-agent": "node.js"
-  });
+  var options = {
+    host: requestUrl.hostname,
+    port: parseInt(requestUrl.port || 80),
+    path: requestUrl.pathname + (requestUrl.search || ''),
+    method: request.method,
+    headers: passThroughHeaders
+  };
 
-  console.log(request.method + ' ' + requestUrl.host + ':' + port + requestUrl.pathname + requestUrl.search);
+  console.log(options);
 
-  if(postBody)
-    client.write(postBody);
-
-  client.end();
-
-  client.on('response', function(response) {
+  var stream = (options.port == 443 ? https : http).request(options, function(response) {
 
     response.setEncoding('utf8');
+
+    response.on('error', function() {
+      console.log('Response Error');
+      console.log(response);
+      console.log(arguments);
+    });
 
     var chunks = [];
     response.on('data', function(chunk) {
@@ -105,6 +120,18 @@ app.get('/perform/:id', function(req, res) {
       res.end('\n');
     });
 
+  });
+
+  if(postBody) {
+    console.log(postBody);
+    stream.write(postBody);
+  }
+
+  stream.end();
+
+  stream.on('error', function(e) {
+    console.log('Error on request: ' + e.message);
+    console.log(e.stack);
   });
 
 });

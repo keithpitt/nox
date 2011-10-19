@@ -1,22 +1,26 @@
 div.request
-  h4 ##{request.id}: #{request.req.headers['nox-url']}
-  p
-    code= request.postBody
   form(method='post', action='/response/#{request.id}', nox-response='true', data-remote='true')
     p
       a(href='/perform/#{request.id}', data-remote='true', nox-perform='true') Perform
       &nbsp;|&nbsp;
       a(href='/kill/#{request.id}', data-remote='true', data-method='delete', nox-kill='true') Kill
+    h4 ##{request.id}: #{request.req.headers['nox-url']}
+    h4 Post Body
+    p
+      code= request.postBody
+    h4 Headers
+    p
+      code= JSON.stringify(request.req.headers)
     p
       label
         strong Status Code
-        input(name='statusCode')
+        input(name='statusCode', value='')
     p
       label
         strong Content Type
-        input(name='contentType')
+        input(name='contentType', value='')
     p
       textarea(name='response')
     p
       button(type='submit') Send Response
-  hr
+    hr
