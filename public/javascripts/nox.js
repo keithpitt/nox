@@ -9,6 +9,12 @@ $('a[nox-perform]').live('ajax:success', function(e, data, status, xhr) {
   e.stopPropagation();
 });
 
+$('a[nox-kill]').live('ajax:success', function(e, data, status, xhr) {
+  $(this).parents('.request').remove();
+
+  e.stopPropagation();
+});
+
 $('form[nox-response]').live('ajax:success', function(e, data, status, xhr) {
   $(this).parents('.request').remove();
 

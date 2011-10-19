@@ -5,6 +5,8 @@ div.request
   form(method='post', action='/response/#{request.id}', nox-response='true', data-remote='true')
     p
       a(href='/perform/#{request.id}', data-remote='true', nox-perform='true') Perform
+      &nbsp;|&nbsp;
+      a(href='/kill/#{request.id}', data-remote='true', data-method='delete', nox-kill='true') Kill
     p
       label
         strong Status Code

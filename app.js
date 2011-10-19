@@ -109,6 +109,20 @@ app.get('/perform/:id', function(req, res) {
 
 });
 
+app.delete('/kill/:id', function(req, res) {
+
+  var current = req.params.id;
+
+  requests[current]['res'] = function(res) {
+    res.end();
+  }
+
+  res.writeHead(200, { 'content-type': 'text/json' });
+  res.write(JSON.stringify({ ok: true }));
+  res.end('\n');
+
+});
+
 app.post('/response/:id', function(req, res) {
 
   var current = req.params.id;
