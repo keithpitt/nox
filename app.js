@@ -5,6 +5,7 @@
 
 var express = require('express');
 var http = require("http");
+var url = require("url");
 
 var app = module.exports = express.createServer();
 
@@ -43,30 +44,66 @@ var wait = function(check, finish) {
 }
 
 app.get('/', function(req, res){
+  var collection = [];
+  for(var k in requests) collection.push(requests[k]);
+
   res.render('index', {
     title: "Nox",
-    requests: requests
+    requests: collection
   });
+});
+
+app.get('/perform/:id', function(req, res) {
+
+  var current = req.params.id;
+  var request = requests[current].req;
+  var requestUrl = url.parse(request.headers['nox-url']);
+
+  var post = http.createClient(requestUrl.port || 80, requestUrl.host);
+
+  var client = post.request('POST', requestUrl.pathname + requestUrl.search, {
+    'Content-Type':'application/x-www-form-urlencoded'
+  });
+
+  // TODO
+  client.write('test=10');
+
+  client.end();
+
+  client.on('response', function(response) {
+
+    response.setEncoding('utf8');
+
+    var chunks = [];
+    response.on('data', function(chunk) {
+      chunks.push(chunk);
+    });
+
+    response.on('end', function(chunk) {
+      var json = { response: chunks.join('') };
+      res.end(JSON.stringify(json));
+    });
+
+  });
+
+});
+
+app.post('/response/:id', function(req, res) {
+
+  var current = req.params.id;
+
+  requests[current]['res'] = function(res) {
+    res.send(req.body.response);
+  }
+
+  res.redirect('/');
+
 });
 
 app.get('/request', function(req, res) {
 
   var current = id++;
-  requests[current] = { req: req };
-
-  http.get({ host: 'google.com', path: '/' }, function (res) {
-
-    console.log(res);
-
-    requests[current]['res'] = function(res) {
-      res.send('yes');
-    }
-
-  });
-
-  // Replace with something else
-  setTimeout(function(){
-  }, 3000);
+  requests[current] = { id: current, req: req };
 
   wait(function() {
     return requests[current]['res'];
