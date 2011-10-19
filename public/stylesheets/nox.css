@@ -2,3 +2,20 @@ textarea {
   width: 90%;
   height: 200px;
 }
+
+.request {
+  padding: 5px;
+}
+
+.request.error {
+  background: red;
+}
+
+.request.error .inputs {
+  display: none;
+}
+
+.error-message {
+  font-weight: bold;
+  color: white;
+}

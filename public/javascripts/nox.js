@@ -2,6 +2,10 @@ var notificationSound = new buzz.sound( "/sounds/alert", {
   formats: [ "wav" ]
 });
 
+var badSound = new buzz.sound( "/sounds/bad", {
+  formats: [ "wav" ]
+});
+
 $('*').live('ajax:success', function(e, data, status, xhr) {
 
   if(!data.ok && data.error) {
@@ -40,9 +44,16 @@ $(function() {
 
   socket.on('connect', function () {
     socket.on('newRequest', function (data) {
-      notificationSound.play();
       $('div.container').append(data);
+      notificationSound.play();
+    });
+
+    socket.on('requestError', function (data) {
+      var request = $('#request-' + data.id);
+      request.addClass('error');
+      request.find('.error-message').html('Error: ' + data.message);
+
+      badSound.play();
     });
   });
 });
-

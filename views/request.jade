@@ -1,5 +1,6 @@
-div.request
+div(id='request-#{request.id}', class='request #{request.state}')
   form(method='post', action='/response/#{request.id}', nox-response='true', data-remote='true')
+    p.error-message= request.error
     p
       a(href='/perform/#{request.id}', data-remote='true', nox-perform='true') Perform
       &nbsp;|&nbsp;
@@ -11,16 +12,17 @@ div.request
     h4 Headers
     p
       code= JSON.stringify(request.req.headers)
-    p
-      label
-        strong Status Code
-        input(name='statusCode', value='', autocomplete='false')
-    p
-      label
-        strong Content Type
-        input(name='contentType', value='', autocomplete='false')
-    p
-      textarea(name='response', autocomplete='false')
-    p
-      button(type='submit') Send Response
-    hr
+    div.inputs
+      p
+        label
+          strong Status Code
+          input(name='statusCode', value='', autocomplete='false')
+      p
+        label
+          strong Content Type
+          input(name='contentType', value='', autocomplete='false')
+      p
+        textarea(name='response', autocomplete='false')
+      p
+        button(type='submit') Send Response
+      hr

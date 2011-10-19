@@ -21,14 +21,7 @@ module.exports = function(app, nox) {
 
   app.all('/request', function(req, res) {
 
-    var postBody = [];
-    req.on('data', function(chunk) {
-      postBody.push(chunk);
-    });
-
-    req.on('end', function() {
-      nox.addRequest(req, res, postBody.join());
-    });
+    nox.addRequest(req, res);
 
   });
 
