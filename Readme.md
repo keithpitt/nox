@@ -1,7 +1,7 @@
 # Nox
 
 Nox is a testing tool that helps you control the responses of all HTTP
-requests.
+requests that are made through it.
 
 ![Nox](http://www.gateworld.net/wiki/images/thumb/8/8a/Anteaus.jpg/300px-Anteaus.jpg)
 
@@ -24,3 +24,41 @@ To start the server:
 ```bash
 $ node app.js
 ```
+
+# Why is this usefull?
+
+If you are working on an application that makes many HTTP requests, your
+testers may want to stub our certain requests - or even just spy on them
+to see if they are called. How can they do this easily? The answer is,
+they can't. You need some sort of proxy between the app and the other
+services.
+
+Nox essentially acts like a proxy, but it allows you to modify the
+response before it is returned to the requester.
+
+## How does it work?
+
+In this example, lets assume we want to download tweets from twitter.
+
+Lets say your running Nox on localhost:7654 (the default). When you make
+a request to "/request" that looks something like this:
+
+```
+POST /request HTTP/1.1
+Nox-URL: https://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=true&screen_name=twitterapi&count=2
+Content-Type: x-www-form-urlencoded
+
+foo=bar&bar=foo
+```
+
+That request will be added to Nox web interface. You'll know when its
+there, because it'll make a sound. From the interface, you'll be able to
+do few things. Continue the request and modify the results, kill the
+request, or create a whole new response from scratch.
+
+The original request will be hanging until you make a decision in Nox.
+
+## Development
+
+Clone down the repo, and start hacking. There are no tests, because
+is still a proof of concept, and I don't know node that well.
