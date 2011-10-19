@@ -13,6 +13,11 @@ div(id='request-#{request.id}', class='request #{request.state}')
 
     h4 ##{request.id}: #{request.req.headers['nox-url']}
 
+    if request.req.headers['nox-timeout']
+      h4 Client Timeout
+      p
+        code.timeout.countdown= request.secondsLeft()
+
     h4 Post Body
     p
       code= request.postBody
