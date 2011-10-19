@@ -1,17 +1,26 @@
 div(id='request-#{request.id}', class='request #{request.state}')
   form(method='post', action='/response/#{request.id}', nox-response='true', data-remote='true')
-    p.error-message= request.error
+
+    if request.error
+      p.error-message Error: #{request.error}
+    else
+      p.error-message
+
     p
       a(href='/perform/#{request.id}', data-remote='true', nox-perform='true') Perform
       &nbsp;|&nbsp;
       a(href='/kill/#{request.id}', data-remote='true', data-method='delete', nox-kill='true') Kill
+
     h4 ##{request.id}: #{request.req.headers['nox-url']}
+
     h4 Post Body
     p
       code= request.postBody
+
     h4 Headers
     p
       code= JSON.stringify(request.req.headers)
+
     div.inputs
       p
         label
