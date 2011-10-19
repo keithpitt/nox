@@ -14,13 +14,13 @@ div.request
     p
       label
         strong Status Code
-        input(name='statusCode', value='')
+        input(name='statusCode', value='', autocomplete='false')
     p
       label
         strong Content Type
-        input(name='contentType', value='')
+        input(name='contentType', value='', autocomplete='false')
     p
-      textarea(name='response')
+      textarea(name='response', autocomplete='false')
     p
       button(type='submit') Send Response
     hr
