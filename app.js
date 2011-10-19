@@ -4,6 +4,7 @@
  */
 
 var express = require('express');
+var http = require("http");
 
 var app = module.exports = express.createServer();
 
@@ -28,11 +29,8 @@ app.configure('production', function(){
 
 // Routes
 
-app.get('/', function(req, res){
-  res.render('index', {
-    title: 'Express'
-  });
-});
+var id = 0;
+var requests = {};
 
 var wait = function(check, finish) {
   if(check()) {
@@ -44,23 +42,38 @@ var wait = function(check, finish) {
   }
 }
 
+app.get('/', function(req, res){
+  res.render('index', {
+    title: "Nox",
+    requests: requests
+  });
+});
+
 app.get('/request', function(req, res) {
 
-  var x = true;
+  var current = id++;
+  requests[current] = { req: req };
 
+  http.get({ host: 'google.com', path: '/' }, function (res) {
+
+    console.log(res);
+
+    requests[current]['res'] = function(res) {
+      res.send('yes');
+    }
+
+  });
+
+  // Replace with something else
   setTimeout(function(){
-    x = false;
-    console.log("ASDASDASD");
   }, 3000);
 
-  console.log(req);
-
   wait(function() {
-    return !x;
+    return requests[current]['res'];
   }, function() {
-    res.render('index', {
-      title: 'Express'
-    });
+    var finish = requests[current]['res'];
+    delete requests[current];
+    finish(res);
   });
 
 });
