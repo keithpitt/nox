@@ -63,7 +63,7 @@ setInterval(function() {
   $('.countdown').each(function(idx, el) {
     var current = parseInt($(el).text());
 
-    $(el).text((current < 0) ? 0 : current - 1);
+    $(el).text((current <= 0) ? 0 : current - 1);
   });
 
 }, 1000);
