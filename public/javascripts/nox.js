@@ -50,6 +50,17 @@ $(function() {
 
       if (soundsEnabled())
         notificationSound.play();
+
+      // window.fluid.showGrowlNotification({
+      //   title: "title",
+      //   description: "description",
+      //   priority: 1,
+      //   sticky: false,
+      //   identifier: "foo",
+      //   onclick: callbackFunc,
+      //   icon: imgEl // or URL string
+      // })
+
     });
 
     socket.on('requestError', function (data) {
