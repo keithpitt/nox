@@ -1,0 +1,7 @@
+#!/bin/sh
+chdir /path/to/nox
+GIT_DIR='.git'
+git pull
+kill `cat PID`
+nohup foreman start 2> nox.log &
+echo $! > PID
