@@ -14,7 +14,8 @@ module.exports = function(app, nox) {
 
     res.render('index', {
       title: "Nox",
-      requests: nox.currentRequests()
+      requests: nox.currentRequests(),
+      sounds: (req.query.sounds == 'false') ? false : true
     });
 
   });

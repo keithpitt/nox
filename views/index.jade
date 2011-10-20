@@ -1,3 +1,8 @@
+div.global
+  if sounds
+    a(href='/?sounds=false') Turn Off Sounds
+  else
+    a(href='/?sounds=true') Turn On Sounds
 h1= title
 div.container
   each request, id in requests

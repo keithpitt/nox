@@ -19,3 +19,9 @@ textarea {
   font-weight: bold;
   color: white;
 }
+
+.global {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+}

@@ -6,12 +6,14 @@ var badSound = new buzz.sound( "/sounds/bad", {
   formats: [ "wav" ]
 });
 
-$('*').live('ajax:success', function(e, data, status, xhr) {
+function soundsEnabled() {
+  return !(window.location.search || "").match(/sounds=false/)
+}
 
+$('*').live('ajax:success', function(e, data, status, xhr) {
   if(!data.ok && data.error) {
     alert('Error: ' + data.error);
   }
-
 });
 
 $('a[nox-perform]').live('ajax:success', function(e, data, status, xhr) {
@@ -45,7 +47,9 @@ $(function() {
   socket.on('connect', function () {
     socket.on('newRequest', function (data) {
       $('div.container').append(data);
-      notificationSound.play();
+
+      if (soundsEnabled())
+        notificationSound.play();
     });
 
     socket.on('requestError', function (data) {
@@ -53,7 +57,8 @@ $(function() {
       request.addClass('error');
       request.find('.error-message').html('Error: ' + data.message);
 
-      badSound.play();
+      if (soundsEnabled())
+        badSound.play();
     });
   });
 });
