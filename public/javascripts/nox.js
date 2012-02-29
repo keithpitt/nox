@@ -30,13 +30,13 @@ $('a[nox-perform]').live('ajax:success', function(e, data, status, xhr) {
 });
 
 $('a[nox-kill]').live('ajax:success', function(e, data, status, xhr) {
-  $(this).parents('.request').remove();
+  $(this).parents('.request-container').remove();
 
   e.stopPropagation();
 });
 
 $('form[nox-response]').live('ajax:success', function(e, data, status, xhr) {
-  $(this).parents('.request').remove();
+  $(this).parents('.request-container').remove();
 
   e.stopPropagation();
 });
@@ -46,7 +46,7 @@ $(function() {
 
   socket.on('connect', function () {
     socket.on('newRequest', function (data) {
-      $('div.container').append(data);
+      $('div.requests-container').append(data);
 
       if (soundsEnabled())
         notificationSound.play();
@@ -66,7 +66,9 @@ $(function() {
     socket.on('requestError', function (data) {
       var request = $('#request-' + data.id);
       request.addClass('error');
-      request.find('.error-message').html('Error: ' + data.message);
+      request.find('.alert-error').show().html('Error: ' + data.message);
+      request.find('.inputs').remove()
+      request.find('.perform-button').remove()
 
       if (soundsEnabled())
         badSound.play();

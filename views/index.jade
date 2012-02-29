@@ -1,9 +1,4 @@
-div.global
-  if sounds
-    a(href='/?sounds=false') Turn Off Sounds
-  else
-    a(href='/?sounds=true') Turn On Sounds
-h1= title
-div.container
+div.requests-container.container(style='margin-top: 50px')
+  h1(style='margin-bottom: 10px') Requests
   each request, id in requests
     include request

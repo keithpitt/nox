@@ -2,7 +2,7 @@
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap.css')
     link(rel='stylesheet', href='/stylesheets/nox.css')
     script(src='/javascripts/jquery-1.6.4.min.js')
     script(src='/javascripts/rails.js')
@@ -10,3 +10,17 @@ html
     script(src='/javascripts/nox.js')
     script(src='/socket.io/socket.io.js')
   body!= body
+    div(class='navbar navbar-fixed-top')
+      div(class='navbar-inner')
+        div(class='container')
+          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.brand(href='/') Nox
+          p.navbar-text.pull-right
+            | Sounds:
+            if sounds
+              a(href='/?sounds=false') Off
+            else
+              a(href='/?sounds=true') On

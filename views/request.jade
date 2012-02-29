@@ -1,42 +1,55 @@
-div(id='request-#{request.id}', class='request #{request.state}')
-  form(method='post', action='/response/#{request.id}', nox-response='true', data-remote='true')
+div(id='request-#{request.id}', class='request-container')
+  h3(style='padding-bottom: 5px')
+    #{request.req.headers['nox-url']}
+    small.pull-right ##{request.id} 
+  div(class='request #{request.state}')
 
-    if request.error
-      p.error-message Error: #{request.error}
-    else
-      p.error-message
+    form(method='post', action='/response/#{request.id}', nox-response='true', data-remote='true')
 
-    p
-      a(href='/perform/#{request.id}', data-remote='true', nox-perform='true') Perform
-      &nbsp;|&nbsp;
-      a(href='/kill/#{request.id}', data-remote='true', data-method='delete', nox-kill='true') Kill
+      if request.error
+        div.alert.alert-error Error: #{request.error}
+        div(class='btn-toolbar')
+          div(class='btn-group')
+            a(href='/kill/#{request.id}', data-remote='true', data-method='delete', nox-kill='true', class='btn btn-danger') Kill
+      else
+        div.alert.alert-error(style='display: none')
+        div(class='btn-toolbar')
+          div(class='btn-group perform-button')
+            a(href='/perform/#{request.id}', data-remote='true', nox-perform='true', class='btn') Perform
+          div(class='btn-group')
+            a(href='/kill/#{request.id}', data-remote='true', data-method='delete', nox-kill='true', class='btn btn-danger') Kill
 
-    h4 ##{request.id}: #{request.req.headers['nox-url']}
+      if request.req.headers['nox-timeout']
+        h4 Client Timeout
+        p
+          code.timeout.countdown= request.secondsLeft()
 
-    if request.req.headers['nox-timeout']
-      h4 Client Timeout
+      h4 URL
       p
-        code.timeout.countdown= request.secondsLeft()
+        if request.postBody
+          pre= request.postBody
 
-    h4 Post Body
-    p
-      code= request.postBody
+      h4 Post Body
+      p
+        if request.postBody
+          pre= request.postBody
+        else
+          pre n/a
 
-    h4 Headers
-    p
-      code= JSON.stringify(request.req.headers)
+      h4 Headers
+      p
+        pre= JSON.stringify(request.req.headers)
 
-    div.inputs
-      p
-        label
-          strong Status Code
-          input(name='statusCode', value='', autocomplete='false')
-      p
-        label
-          strong Content Type
-          input(name='contentType', value='', autocomplete='false')
-      p
-        textarea(name='response', autocomplete='false')
-      p
-        button(type='submit') Send Response
-      hr
+      div.inputs
+        p
+          label
+            strong Status Code
+            input(name='statusCode', value='', autocomplete='false')
+        p
+          label
+            strong Content Type
+            input(name='contentType', value='', autocomplete='false')
+        p
+          textarea(name='response', autocomplete='false')
+        p
+          button(type='submit', class='btn btn-primary') Send Response

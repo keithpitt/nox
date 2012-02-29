@@ -4,11 +4,10 @@ textarea {
 }
 
 .request {
-  padding: 5px;
-}
-
-.request.error {
-  background: red;
+  background: whiteSmoke;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
 }
 
 .request.error .inputs {
@@ -24,4 +23,12 @@ textarea {
   position: absolute;
   top: 30px;
   right: 30px;
+}
+
+.alert {
+  margin-bottom: 8px !important;
+}
+
+.btn-toolbar {
+  margin-top: 0px;
 }
