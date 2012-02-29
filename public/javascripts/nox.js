@@ -65,7 +65,7 @@ $(function() {
 
     socket.on('requestError', function (data) {
       var request = $('#request-' + data.id);
-      request.addClass('error');
+      request.find('.request').addClass('error');
       request.find('.alert-error').show().html('Error: ' + data.message);
       request.find('.inputs').remove()
       request.find('.perform-button').remove()

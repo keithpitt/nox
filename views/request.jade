@@ -1,55 +1,53 @@
 div(id='request-#{request.id}', class='request-container')
+
   h3(style='padding-bottom: 5px')
     #{request.req.headers['nox-url']}
     small.pull-right ##{request.id} 
+
   div(class='request #{request.state}')
 
-    form(method='post', action='/response/#{request.id}', nox-response='true', data-remote='true')
+    if request.error
+      div.alert.alert-error Error: #{request.error}
+      div(class='btn-toolbar')
+        div(class='btn-group')
+          a(href='/kill/#{request.id}', data-remote='true', data-method='delete', nox-kill='true', class='btn btn-danger') Kill
+    else
+      div.alert.alert-error(style='display: none')
+      div(class='btn-toolbar')
+        div(class='btn-group perform-button')
+          a(href='/perform/#{request.id}', data-remote='true', nox-perform='true', class='btn') Perform
+        div(class='btn-group')
+          a(href='/kill/#{request.id}', data-remote='true', data-method='delete', nox-kill='true', class='btn btn-danger') Kill
 
-      if request.error
-        div.alert.alert-error Error: #{request.error}
-        div(class='btn-toolbar')
-          div(class='btn-group')
-            a(href='/kill/#{request.id}', data-remote='true', data-method='delete', nox-kill='true', class='btn btn-danger') Kill
-      else
-        div.alert.alert-error(style='display: none')
-        div(class='btn-toolbar')
-          div(class='btn-group perform-button')
-            a(href='/perform/#{request.id}', data-remote='true', nox-perform='true', class='btn') Perform
-          div(class='btn-group')
-            a(href='/kill/#{request.id}', data-remote='true', data-method='delete', nox-kill='true', class='btn btn-danger') Kill
-
-      if request.req.headers['nox-timeout']
-        h4 Client Timeout
-        p
-          code.timeout.countdown= request.secondsLeft()
-
-      h4 URL
+    if request.req.headers['nox-timeout']
+      h4 Client Timeout
       p
-        if request.postBody
-          pre= request.postBody
+        code.timeout.countdown= request.secondsLeft()
 
+    if request.postBody
       h4 Post Body
       p
-        if request.postBody
-          pre= request.postBody
-        else
-          pre n/a
+        pre= request.postBody
 
-      h4 Headers
-      p
-        pre= JSON.stringify(request.req.headers)
+    h4 Headers
+    p
+      pre= JSON.stringify(request.req.headers)
 
+    form(method='post', action='/response/#{request.id}', nox-response='true', data-remote='true', class='form-horizontal')
       div.inputs
-        p
-          label
-            strong Status Code
-            input(name='statusCode', value='', autocomplete='false')
-        p
-          label
-            strong Content Type
-            input(name='contentType', value='', autocomplete='false')
-        p
-          textarea(name='response', autocomplete='false')
-        p
-          button(type='submit', class='btn btn-primary') Send Response
+        h4 Response
+        fieldset
+          div.control-group
+            label(class='control-label') Status Code
+            .controls
+              input(name='statusCode', value='', class='input-xlarge', autocomplete='false')
+          div.control-group
+            label(class='control-label') Content Type
+            .controls
+              input(name='contentType', value='', autocomplete='false')
+          div.control-group
+            label(class='control-label') Response Body
+            .controls
+              textarea(name='response', autocomplete='false')
+          div.form-actions
+            button(type='submit', class='btn btn-primary') Send Response

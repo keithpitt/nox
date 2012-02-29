@@ -5,9 +5,13 @@ textarea {
 
 .request {
   background: whiteSmoke;
-  padding: 10px;
+  padding: 10px 10px 0;
   margin-bottom: 10px;
   border-radius: 6px;
+}
+
+.request.error {
+  padding-bottom: 1px;
 }
 
 .request.error .inputs {
