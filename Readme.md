@@ -3,7 +3,7 @@
 Nox is a testing tool that helps you control the responses of all HTTP
 requests that are made through it.
 
-![Nox](http://www.gateworld.net/wiki/images/thumb/8/8a/Anteaus.jpg/300px-Anteaus.jpg)
+![Nox](https://github.com/Jetstar/nox/blob/master/docs/nox.png?raw=true)
 
 ## Depedencies
 
