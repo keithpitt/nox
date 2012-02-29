@@ -1,8 +1,8 @@
 {
     "name": "nox"
-  , "version": "0.0.1"
+  , "version": "0.0.2"
   , "dependencies": {
-      "express": "2.4.7"
+      "express": "2.5.8"
     , "jade": ">= 0.16.2"
     , "underscore": ">= 1.2.0"
     , "socket.io": "0.8.5"
