@@ -26,6 +26,14 @@ module.exports = function(app, nox) {
 
   });
 
+  app.get('/clear-all', function(req, res) {
+
+    nox.clearAll();
+
+    res.redirect('/');
+
+  });
+
   app.delete('/kill/:id', function(req, res) {
 
     var request = nox.findRequest(req.params.id);

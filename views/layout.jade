@@ -18,9 +18,11 @@ html
             span.icon-bar
             span.icon-bar
           a.brand(href='/') Nox
-          p.navbar-text.pull-right
-            | Sounds:
-            if sounds
-              a(href='/?sounds=false') Off
-            else
-              a(href='/?sounds=true') On
+          ul.nav.pull-right
+            li
+              a(href='/clear-all', data-confirm="Are you sure you want to kill all the current requests?") Kill All
+            li
+              if sounds
+                a(href='/?sounds=false') Sounds Off
+              else
+                a(href='/?sounds=true') Sounds On
