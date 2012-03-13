@@ -26,9 +26,9 @@ module.exports = function(app, nox) {
 
   });
 
-  app.get('/clear-all', function(req, res) {
+  app.get('/kill-all', function(req, res) {
 
-    nox.clearAll();
+    nox.killAll();
 
     res.redirect('/');
 

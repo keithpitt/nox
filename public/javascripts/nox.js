@@ -18,7 +18,7 @@ $('*').live('ajax:success', function(e, data, status, xhr) {
 
 $('a[nox-perform]').live('ajax:success', function(e, data, status, xhr) {
   var el = $(this);
-  var form = el.parents('form');
+  var form = el.parents('.request-container');
 
   if(data.ok) {
     form.find('textarea[name=response]').val(data.response);

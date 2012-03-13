@@ -31,7 +31,9 @@ div(id='request-#{request.id}', class='request-container')
 
     h4 Headers
     p
-      pre= JSON.stringify(request.req.headers)
+      pre
+        each value, key in request.req.headers
+          #{key}=#{value}
 
     form(method='post', action='/response/#{request.id}', nox-response='true', data-remote='true', class='form-horizontal')
       div.inputs
