@@ -77,3 +77,7 @@ The original request will be hanging until you make a decision in Nox.
 
 Clone down the repo, and start hacking. There are no tests, because
 is still a proof of concept, and I don't know node that well.
+
+## Copyright
+
+Copyright (c) 2012 Hooroo. See LICENSE for details.
