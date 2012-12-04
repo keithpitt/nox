@@ -10,6 +10,16 @@ function soundsEnabled() {
   return !(window.location.search || "").match(/sounds=false/)
 }
 
+function updateTitle() {
+  var requests = $('.request').length
+
+  if(requests > 0) {
+    document.title = "Nox (" + requests + ")";
+  } else {
+    document.title = "Nox";
+  };
+}
+
 $('*').live('ajax:success', function(e, data, status, xhr) {
   if(!data.ok && data.error) {
     alert('Error: ' + data.error);
@@ -61,6 +71,7 @@ $(function() {
       //   icon: imgEl // or URL string
       // })
 
+      updateTitle();
     });
 
     socket.on('requestError', function (data) {
@@ -77,11 +88,11 @@ $(function() {
 });
 
 setInterval(function() {
-
   $('.countdown').each(function(idx, el) {
     var current = parseInt($(el).text());
 
     $(el).text((current <= 0) ? 0 : current - 1);
   });
 
+  updateTitle();
 }, 1000);
